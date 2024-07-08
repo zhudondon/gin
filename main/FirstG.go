@@ -15,7 +15,6 @@ type Login struct {
 func main() {
 	router := gin.Default()
 	router.GET("/first", func(context *gin.Context) {
-		fmt.Sprintf("111ss1 %s", "sfsf")
 		name := context.DefaultQuery("name", "don")
 		job := context.Query("job")
 
@@ -73,6 +72,10 @@ func main() {
 		})
 	})
 
+	/**
+	curl -v -X POST http://127.0.0.1:8030/loginJSON -H 'Content-type:application/json' -d "{\"user\": \"don\",\"password\":\"123\"}}"
+
+	*/
 	router.POST("/loginJSON", func(context *gin.Context) {
 		var json Login
 		router.Use(gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
@@ -92,7 +95,7 @@ func main() {
 		}))
 
 		if err := context.ShouldBindJSON(&json); err != nil {
-			context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			context.JSON(http.StatusBadRequest, gin.H{"error": err.Error(), "msg": json})
 			return
 		}
 
